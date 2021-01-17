@@ -2,7 +2,7 @@
 
 import dotenv from 'dotenv'
 import express from 'express'
-import { Client, ClientConfig, MiddlewareConfig, TextMessage, WebhookEvent, middleware } from '@line/bot-sdk'
+import { Client, ClientConfig, MiddlewareConfig, WebhookEvent, middleware } from '@line/bot-sdk'
 import { dialogManager } from './controllers/dialog'
 import { userManager } from './controllers/user'
 
@@ -45,10 +45,9 @@ function handleEvent (event: WebhookEvent) {
   if (!userManager.isNewUser(event.source)) {
     userManager.createNewUser(event)
   }
-  const text = dialogManager.executeCommands(event.message)
   // create a echoing text message
-  const echo = { type: 'text', text } as TextMessage
-
+  const echo = dialogManager.executeCommands(event.source, event.message)
+  console.log(echo)
   // use reply API
   return client.replyMessage(event.replyToken, echo)
 }
