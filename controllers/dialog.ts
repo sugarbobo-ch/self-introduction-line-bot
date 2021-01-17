@@ -1,4 +1,4 @@
-import { EventMessage, EventSource, TemplateMessage, TextEventMessage, Message, FlexMessage } from '@line/bot-sdk'
+import { EventMessage, EventSource, TemplateMessage, Message, FlexMessage } from '@line/bot-sdk'
 import { userManager } from './user'
 import * as Menu from '../config/menu.json'
 
@@ -9,20 +9,27 @@ interface IMenu {
 const menu = Menu as IMenu
 
 function executeCommands (source: EventSource, message: EventMessage): Message {
-  const text = ''
-  if (message.type === 'text') {
-    const treeNodes = userManager.getUserTree(source.userId!)
+  const userId = source.userId
+  let echo = sayHello() as Message
+  if (userId && message.type === 'text') {
+    const treeNodes = userManager.getMessages(userId)
     if (treeNodes.length === 0) {
-      treeNodes.push(0)
-      return sayHello((message as TextEventMessage).text)
-    } else if (treeNodes.length === 1) {
-      return showMessage(source.userId!, message.text)
+      userManager.saveMessage(userId, message, echo)
+      return echo
+    } else if (treeNodes.length >= 1) {
+      if (message.text === menu.back) {
+        userManager.popMessage(userId)
+        return userManager.getLastMessage(userId) || sayHello()
+      }
+      echo = showMessage(userId, message.text)
+      userManager.saveMessage(userId, message, echo)
+      return echo
     }
   }
-  return { type: 'text', text }
+  return echo
 }
 
-function sayHello (text: string): TemplateMessage {
+function sayHello (): TemplateMessage {
   return menu.home as TemplateMessage
 }
 

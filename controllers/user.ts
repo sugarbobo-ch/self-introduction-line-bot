@@ -1,4 +1,4 @@
-import { EventSource, Message, WebhookEvent } from '@line/bot-sdk'
+import { EventMessage, EventSource, Message, WebhookEvent } from '@line/bot-sdk'
 import { Dialog } from '../models/dialog'
 import { User } from '../models/user'
 
@@ -21,23 +21,39 @@ function createNewUser (event: WebhookEvent): void {
   }
 }
 
-function getUserTree (userId: string): Number[] {
+function getMessages (userId: string): Message[] {
   if (userId && userDict[userId]) {
-    return userDict[userId].dialog.treeNodes
+    return userDict[userId].dialog.responseMessages
   }
   return []
 }
 
 function getLastMessage (userId: string): Message | null {
   if (userId && userDict[userId]) {
+    console.log('getLastMessage')
+    console.log(userDict, userDict[userId], userDict[userId].dialog, userDict[userId].dialog.lastMessageToUser)
     return userDict[userId].dialog.lastMessageToUser
   }
   return null
 }
 
+function saveMessage (userId: string, message: EventMessage, response: Message): void {
+  if (userId && userDict[userId]) {
+    userDict[userId].dialog.push(message, response)
+  }
+}
+
+function popMessage (userId: string): void {
+  if (userId && userDict[userId]) {
+    userDict[userId].dialog.pop()
+  }
+}
+
 export const userManager = {
   isNewUser,
   createNewUser,
-  getUserTree,
-  getLastMessage
+  getMessages,
+  getLastMessage,
+  saveMessage,
+  popMessage
 }

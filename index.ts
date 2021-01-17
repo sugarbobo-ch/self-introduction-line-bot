@@ -47,7 +47,6 @@ function handleEvent (event: WebhookEvent) {
   }
   // create a echoing text message
   const echo = dialogManager.executeCommands(event.source, event.message)
-  console.log(echo)
   // use reply API
   return client.replyMessage(event.replyToken, echo)
 }
