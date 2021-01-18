@@ -30,7 +30,20 @@ function executeCommands (source: EventSource, message: EventMessage): Message {
 }
 
 function sayHello (): TemplateMessage {
-  return menu.home as TemplateMessage
+  let helloMessage = JSON.stringify(menu.home)
+  helloMessage = helloMessage.replace(/\${timeHello}/g, (): string => {
+    const date = new Date()
+    const hour = date.getUTCHours() + parseInt(process.env.TIME_ZONE || '8')
+    if (hour >= 5 && hour < 12) {
+      return '早安'
+    } else if (hour > 12 && hour < 18) {
+      return '午安'
+    } else {
+      return '晚安'
+    }
+  })
+  console.log(helloMessage)
+  return JSON.parse(helloMessage) as TemplateMessage
 }
 
 function showMessage (userId: string, text: string): FlexMessage {
