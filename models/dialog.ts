@@ -32,7 +32,14 @@ export class Dialog {
   }
 
   public pop () {
-    this.responseMessages.pop()
-    this.lastMessageToUser = this.responseMessages[this.responseMessages.length - 1]
+    if (this.responseMessages.length > 0) {
+      this.responseMessages.pop()
+      this.lastMessageToUser = this.responseMessages[this.responseMessages.length - 1]
+    }
+  }
+
+  public clear () {
+    this.responseMessages = []
+    this.lastMessageToUser = null
   }
 }

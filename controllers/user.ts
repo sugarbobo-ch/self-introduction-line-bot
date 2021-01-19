@@ -21,17 +21,8 @@ function createNewUser (event: WebhookEvent): void {
   }
 }
 
-function getMessages (userId: string): Message[] {
-  if (userId && userDict[userId]) {
-    return userDict[userId].dialog.responseMessages
-  }
-  return []
-}
-
 function getLastMessage (userId: string): Message | null {
   if (userId && userDict[userId]) {
-    console.log('getLastMessage')
-    console.log(userDict, userDict[userId], userDict[userId].dialog, userDict[userId].dialog.lastMessageToUser)
     return userDict[userId].dialog.lastMessageToUser
   }
   return null
@@ -49,11 +40,17 @@ function popMessage (userId: string): void {
   }
 }
 
+function clearMessage (userId: string): void {
+  if (userId && userDict[userId]) {
+    userDict[userId].dialog.clear()
+  }
+}
+
 export const userManager = {
   isNewUser,
   createNewUser,
-  getMessages,
   getLastMessage,
   saveMessage,
-  popMessage
+  popMessage,
+  clearMessage
 }

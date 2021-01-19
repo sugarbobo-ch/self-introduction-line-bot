@@ -12,19 +12,16 @@ function executeCommands (source: EventSource, message: EventMessage): Message {
   const userId = source.userId
   let echo = sayHello() as Message
   if (userId && message.type === 'text') {
-    const treeNodes = userManager.getMessages(userId)
-    if (treeNodes.length === 0) {
-      userManager.saveMessage(userId, message, echo)
-      return echo
-    } else if (treeNodes.length >= 1) {
-      if (message.text === menu.back) {
-        userManager.popMessage(userId)
-        return userManager.getLastMessage(userId) || sayHello()
-      }
-      echo = showMessage(userId, message.text)
-      userManager.saveMessage(userId, message, echo)
-      return echo
+    // const treeNodes = userManager.getMessages(userId)
+    if (message.text === menu.back) {
+      userManager.popMessage(userId)
+      return userManager.getLastMessage(userId) || sayHello()
+    } else if (menu.homeOptions.includes(message.text)) {
+      userManager.clearMessage(userId)
     }
+    echo = showMessage(userId, message.text)
+    userManager.saveMessage(userId, message, echo)
+    return echo
   }
   return echo
 }
@@ -46,10 +43,10 @@ function sayHello (): TemplateMessage {
   return JSON.parse(helloMessage) as TemplateMessage
 }
 
-function showMessage (userId: string, text: string): FlexMessage {
+function showMessage (userId: string, text: string): Message {
   if (menu.options[text] === undefined) {
     const echo = userManager.getLastMessage(userId)
-    return echo || menu.home
+    return echo || sayHello()
   }
   return menu.options[text] as FlexMessage
 }
