@@ -42,7 +42,8 @@ function handleEvent (event: WebhookEvent) {
     return Promise.resolve(null)
   }
   console.log(event)
-  if (!userManager.isNewUser(event.source)) {
+  // Register user
+  if (!userManager.isNewUser(event)) {
     userManager.createNewUser(event)
   }
   // create a echoing text message

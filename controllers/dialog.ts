@@ -39,12 +39,12 @@ function sayHello (): TemplateMessage {
       return '晚安'
     }
   })
-  console.log(helloMessage)
   return JSON.parse(helloMessage) as TemplateMessage
 }
 
 function showMessage (userId: string, text: string): Message {
   if (menu.options[text] === undefined) {
+    // Fallback message
     const echo = userManager.getLastMessage(userId)
     return echo || sayHello()
   }

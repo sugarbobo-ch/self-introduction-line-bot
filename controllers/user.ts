@@ -1,12 +1,18 @@
-import { EventMessage, EventSource, Message, WebhookEvent } from '@line/bot-sdk'
+import { EventMessage, Message, WebhookEvent } from '@line/bot-sdk'
 import { Dialog } from '../models/dialog'
 import { User } from '../models/user'
 
-const userDict = {} as { [key: string]: User }
+const userDict = {} as { [key: string]: User | undefined }
 
-function isNewUser (source: EventSource): boolean {
+function isNewUser (event: WebhookEvent): boolean {
+  const source = event.source
   const { userId } = source
   if (userId && userDict[userId]) {
+    // User is idle for an hour, clear previous state
+    if (event.timestamp - userDict[userId]!.createAt > 1000 * 60 * 60) {
+      userDict[userId] = undefined
+      return false
+    }
     return true
   }
   return false
@@ -22,27 +28,31 @@ function createNewUser (event: WebhookEvent): void {
 }
 
 function getLastMessage (userId: string): Message | null {
-  if (userId && userDict[userId]) {
-    return userDict[userId].dialog.lastMessageToUser
+  const user = userDict[userId]
+  if (user) {
+    return user.dialog.lastMessageToUser
   }
   return null
 }
 
 function saveMessage (userId: string, message: EventMessage, response: Message): void {
-  if (userId && userDict[userId]) {
-    userDict[userId].dialog.push(message, response)
+  const user = userDict[userId]
+  if (user) {
+    user.dialog.push(message, response)
   }
 }
 
 function popMessage (userId: string): void {
-  if (userId && userDict[userId]) {
-    userDict[userId].dialog.pop()
+  const user = userDict[userId]
+  if (user) {
+    user.dialog.pop()
   }
 }
 
 function clearMessage (userId: string): void {
-  if (userId && userDict[userId]) {
-    userDict[userId].dialog.clear()
+  const user = userDict[userId]
+  if (user) {
+    user.dialog.clear()
   }
 }
 

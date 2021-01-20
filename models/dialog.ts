@@ -26,7 +26,6 @@ export class Dialog {
     }
     this.conversations.push(message)
     this.count = this.conversations.length
-    console.log('Push', response)
     this.lastMessageToUser = response
     this.responseMessages.push(response)
   }

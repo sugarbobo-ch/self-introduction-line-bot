@@ -1,0 +1,70 @@
+{
+  "home": {
+    "type":"flex",
+    "altText":"Menu",
+    "contents":{
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Menu"
+          }
+        ]
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "Hello, world",
+              "text": "Hello, world"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "back": "Back",
+  "homeOptions": [
+    "Hello, world"
+  ],
+  "options": {
+    "Hello, world": {
+      "type":"flex",
+      "altText":"Hello, World!",
+      "contents":{
+        "type": "bubble",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": "hello, world"
+            }
+          ]
+        },
+        "footer": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "button",
+              "action": {
+                "type": "message",
+                "label": "Back",
+                "text": "Back"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

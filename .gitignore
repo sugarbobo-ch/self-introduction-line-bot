@@ -105,4 +105,4 @@ build
 .tern-port
 
 # Configuration
-config
+config/menu.json
