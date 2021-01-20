@@ -24,6 +24,13 @@ ren template.json menu.json
 cd ..
 ```
 
+Setup environment with `.env` in root folder
+```
+CHANNEL_ACCESS_TOKEN = {{YOUR CHANNEL ACCESS TOKEN}}
+CHANNEL_SECRET = {{YOUR CHANNEL SECRET}}
+TIME_ZONE = {{YOUR TIME ZONE}}
+```
+
 Then start project run with:
 ```
 yarn install
